@@ -1,3 +1,5 @@
+clean up will be completed in 12 hours. I am signing out now
+
 # SyncWords API
 
 ## Table of Contents
@@ -19,9 +21,9 @@ This repository houses the SyncWords API, a system built using Laravel 8+ and Sa
 
 ## Setup and Installation
 
-1. **Docker Compose**: Ensure Docker and Docker Compose are installed. Run `docker-compose up` to start the application and database containers.
+1. **Docker Compose**: Ensure Docker and Docker Compose are installed. Run `make up` to start the application and database containers.
 
-2. **Database Migrations**: After starting the containers, run `php artisan migrate` to set up the necessary database tables.
+2. **Database Migrations**: After starting the containers, run `make laravel-setup` to set up the necessary database tables.
 
 3. **Sanctum Configuration**: The API uses Sanctum for authentication. Ensure that the Sanctum configuration is published and the migrations are run as mentioned in the setup steps above.
 
