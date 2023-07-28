@@ -14,7 +14,7 @@ TEST_DB_PASSWORD=syncworld_password_test
 TEST_DB_DATABASE=syncworld_db_test
 
 # Default task
-all: up setup-env laravel-setup unit-test
+all: up setup-env laravel-setup #unit-test
 
 # Docker Operations
 up: setup-env-files
@@ -59,10 +59,10 @@ setup-env: setup-env-files set-env-credentials setup-test-database
 
 setup-test-database:
 	# Drop the user and database if they exist
-	-docker-compose exec db dropdb -U laravel --if-exists $(TEST_DB_DATABASE)
-	-docker-compose exec db dropuser -U laravel --if-exists $(TEST_DB_USERNAME)
+	-docker-compose exec db dropdb -U $(DB_USERNAME) --if-exists $(TEST_DB_DATABASE)
+	-docker-compose exec db dropuser -U $(DB_USERNAME) --if-exists $(TEST_DB_USERNAME)
 	# Create the user and databases
-	docker-compose exec db createuser -U laravel --superuser --createdb --createrole --login $(TEST_DB_USERNAME)
+	docker-compose exec db createuser -U $(DB_USERNAME) --superuser --createdb --createrole --login $(TEST_DB_USERNAME)
 	docker-compose exec db psql -U $(TEST_DB_USERNAME) -d $(PG_CONFIG_DATABASE) -c "ALTER USER $(TEST_DB_USERNAME) WITH PASSWORD '$(TEST_DB_PASSWORD)';"
 	docker-compose exec db createdb -U $(TEST_DB_USERNAME) $(TEST_DB_DATABASE)
 
@@ -70,7 +70,7 @@ setup-test-database:
 laravel-setup: composer-install keygen cache-operations migrate-seed
 
 composer-install:
-	docker-compose exec app composer install --optimize-autoloader --no-dev
+	docker-compose exec app composer install --optimize-autoloader
 
 keygen:
 	docker-compose exec app php artisan key:generate
@@ -86,7 +86,7 @@ migrate-seed:
 # Tests
 unit-test:
 	@echo "Running unit tests..."
-	docker-compose exec app ./vendor/bin/phpunit --testsuite Unit
+	docker-compose exec app ./vendor/bin/phpunit --testsuite Feature --configuration phpunit.xml
 
 # Cleanup
 clean:

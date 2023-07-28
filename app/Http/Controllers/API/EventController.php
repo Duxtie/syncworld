@@ -67,7 +67,7 @@ class EventController extends Controller
         try {
             $event = Event::findOrFail($id);
             $event->delete();
-            return ApiResponse::success('Event deleted successfully');
+            return ApiResponse::success([], 'Event deleted successfully');
         } catch (\Exception $e) {
             return ApiResponse::error('Event not found', 404);
         }
